@@ -1,40 +1,41 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+// webpack.config.js
+import path from "path";
+import { fileURLToPath } from "url";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
-module.exports = {
-  entry: "./src/index.js",  // starting point
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+  entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
+    clean: true,
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,       // JS & JSX files
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader", // sends code → Babel
+          loader: "babel-loader",
         },
-      },
-      {
-        test: /\.css$/,           // CSS files
-        use: ["style-loader", "css-loader"],
       },
     ],
   },
-  resolve: {
-    extensions: [".js", ".jsx"], // allow imports without extension
-  },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./public/index.html", // injects bundle into HTML
+      template: "./public/index.html",
     }),
   ],
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
   devServer: {
-    static: "./dist",
+    static: path.resolve(__dirname, "dist"),
     port: 3000,
     hot: true,
     open: true,
   },
-  mode: "development",
 };
